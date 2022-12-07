@@ -1,26 +1,68 @@
 <script lang="ts">
-    export let backgroundColor: string = "blue";
-    export let color: string = "white";
-    export let width: number = 40;
-	export let height: number = 0;
+	import { outsideAction, addHide } from "$lib/utils/domManipulation";
 
-    $: style = `--backgroundColor: ${backgroundColor}; color: ${color};
-    --width: ${width}%; --height: ${height}%;`;
+    export let backgroundColor: string = "var(--primary-color)";
+    export let color: string = "var(--white-color)";
+    export let width: number = 30;
+	export let height: number = 0;
+    export let position: string = "fixed";
+    export let top: number = 0;
+    export let left: number = 0;
+    export let bottom: number = 0;
+    export let right: number = 0;
+
+    $: position = `position: ${position}; top: ${top}rem; left: ${left}rem; bottom: ${bottom}rem; right: ${right}rem`;
+    $: variables = `--backgroundColor: ${backgroundColor}; color: ${color}; --width: ${width}%; --height: ${height}%;`
+    $: style =  `${variables} ${position}`;
+
+    function handleOutsideAction(element: HTMLElement) {      
+        outsideAction(element, 'mousemove', addHide, `li`);
+    }
 </script>
 
 <div class="sidenav" {style}>
-    <slot />
+    <div class="header-menu">
+        <slot name="header-menu"/>
+    </div>
+    <div class="main-menu" use:handleOutsideAction>
+        <slot name="main-menu" />
+    </div>
+    <div class="footer-menu">
+        <slot name="footer-menu" />
+    </div>
 </div>
 
 <style>
     .sidenav {
-        position: fixed;
-        top: 1rem;
-        bottom: 1rem;
         background-color: var(--backgroundColor);
         width: var(--width);
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+        position: relative;
+        overflow-x: hidden;
+    }
+    .header-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0;
+        border-bottom: 2px solid var(--white-color);
+        width: 100%;
+    }
+    .main-menu {
+        margin: 1rem;
+        width: 100%;
+        height: 100%;
+    }
+    .footer-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0;
+        border-top: 2px solid var(--white-color);
+        width: 100%;
     }
 </style>

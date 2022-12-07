@@ -1,25 +1,48 @@
 <script lang="ts">
+	import { outsideAction, toggleHideAction } from "$lib/utils/domManipulation";
+
+
     export let outline: boolean = false;
     export let rounded: number = 50;
-    export let width: number = 8;
-	export let height: number = 2;
+    export let width: number = 100;
+	export let height: number = 7;
     export let href: string;
-    export let color: string = 'white';
-    export let backgroundColor: string = 'blue';
-    export let borderColor: string = 'blue';
-	export let border: number = 2;
+    export let color: string = 'var(--white-color)';
+    export let backgroundColor: string = 'inherent';
+    export let borderColor: string = 'inherent';
+    export let hoverColor: string = 'var(--white-color)';
+    export let hoverBackgroundColor: string = 'var(--tertiary-color)';
+	export let border: number = 0;
 	export let fontSize: string = '1rem'
+    export let level: number = 1;
+    export let targetElement: string = '';
+    export let elementId: string = '';
+
+    let element: HTMLElement;
+
+    $: borderStyle = border !== 0 ? 
+    `border: ${border}px solid ${borderColor};` : 'border: none;'
+    $: variables = `--rounded: ${rounded}rem; --width: ${width}%; --height: ${height}%; --backgroundColor: ${color}; 
+	--color: ${backgroundColor}; --borderColor: ${borderColor}; --fontSize: ${fontSize};  --level: ${level}rem;`;
 
     $: style = outline ? 
-	`--rounded: ${rounded}rem; --width: ${width}rem; --height: ${height}rem; --backgroundColor: ${color}; 
-	--color: ${backgroundColor}; --borderColor: ${borderColor}; --border: 1px;
-	--hoverColor: ${backgroundColor}; --hoverBackgroundColor: ${color}; --fontSize: ${fontSize}`
-	: `--rounded: ${rounded}rem; --width: ${width}rem; --height: ${height}rem; --backgroundColor: ${backgroundColor}; 
-	--color: ${color}; --borderColor: ${borderColor}; --border: ${border}px; --hoverColor: ${backgroundColor}; 
-	--hoverBackgroundColor: ${color}; --fontSize: ${fontSize}`;
+	`${variables} --backgroundColor: ${color}; --color: ${backgroundColor}; ${borderStyle} --hoverColor: ${color}; 
+    --hoverBackgroundColor: ${backgroundColor};`
+	: `${variables} --backgroundColor: ${backgroundColor}; --color: ${color}; ${borderStyle} --hoverColor: ${hoverColor}; 
+    --hoverBackgroundColor: ${hoverBackgroundColor};`;
+
+    function handleOnMouseEnter(node: HTMLElement) {
+        toggleHideAction(node, 'mouseenter');    
+    }
 </script>
 
-<li class="nav-link" {style}>
+<li  
+    {style} 
+    class={level === 1 ? 'nav-link' : 'nav-link hide'} 
+    bind:this={element}
+    data-target-element={targetElement}
+    data-element-id={elementId}
+    use:handleOnMouseEnter >
     <a {href}><slot /></a>
 </li>
 
@@ -27,7 +50,6 @@
     .nav-link {
         list-style: none;
         cursor: pointer;
-        padding: 0.5rem;
         background-color: var(--backgroundColor);
         border-radius: var(--rounded);
         width: var(--width);
@@ -35,8 +57,11 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: center;
-        
+        position: relative;
+        transition: 0.3s;
+        margin: 0.3rem 0;
+        margin-left: calc(var(--level) + 1rem);
+        visibility: visible;
     }
     a {
         text-decoration: none;
@@ -47,9 +72,25 @@
     }
     .nav-link:hover {
         background-color: var(--hoverBackgroundColor);
-        border: var(--border) solid var(--borderColor);
     }
     .nav-link:hover a {
         color: var(--hoverColor);
+        font-weight: 600;
+    }
+    .nav-link:hover a::after {
+        content: ' ';
+        display: inline-block;
+        border-bottom: 3px solid var(--white-color);
+        border-right: 3px solid var(--white-color);
+        height: 0.6rem;
+        width: 0.6rem;
+        transform: rotate(-45deg);
+        position: absolute;
+        right: calc(var(--level) + 1.5rem);
+        transition: 0.3s;
+    }
+    .hide {
+        display: none;
+        visibility: hidden;
     }
 </style>

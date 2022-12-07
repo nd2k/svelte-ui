@@ -7,9 +7,9 @@
   export let name: FeatherIconNames;
   export let direction: string = "n";
   export let strokeWidth: string = "1.5px"
-  export let stroke: string = "red";
-  export let width: string | number = 24;
-  export let height: string | number = 24;
+  export let stroke: string = "var(--white-color)";
+  export let width: string | number = 16;
+  export let height: string | number = 16;
   let attrs: FeatherAttributes;
     
     $: icon = feather.icons[name];
@@ -35,6 +35,8 @@
       transform-origin: 50% 50%;
       cursor: pointer;
       margin: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
   </style>

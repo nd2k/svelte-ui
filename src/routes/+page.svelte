@@ -4,10 +4,17 @@
 	import Sidenav from '$lib/components/Sidenav.svelte';
 </script>
 
-<Icon name="alert-circle" />
-<Navlink href="/">Home</Navlink>
-
 <Sidenav>
-    <Navlink href="/"><Icon name="alert-circle" />Home</Navlink>
-    <Navlink href="/">About</Navlink>
+    <h1 slot="header-menu">Logo</h1>
+    <div slot="main-menu">
+        <Navlink href="/"><Icon name="minus-square" />Home</Navlink>
+        <Navlink href="/" targetElement="documentation"><Icon name="plus-square" />Documentation</Navlink>
+        <Navlink href="/" level={2} elementId="documentation"><Icon name="minus-square" />Let's start</Navlink>
+        <Navlink href="/" level={2} elementId="documentation"><Icon name="minus-square" />Create project</Navlink>
+        <Navlink href="/" targetElement="test"><Icon name="plus-square" />Test</Navlink>
+        <Navlink href="/" level={2} elementId="test"><Icon name="minus-square" />Test 1</Navlink>
+        <Navlink href="/" level={2} elementId="test"><Icon name="minus-square" />Test 2</Navlink>
+    </div>
+    <h3 slot="footer-menu">Footer Menu</h3>
 </Sidenav>
+
