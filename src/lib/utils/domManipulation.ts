@@ -32,17 +32,23 @@ export function toggleHideAction(element: HTMLElement, showEventListener: string
 }
 
 export function toggleHide(selector: string) {
-    let nodeList = document.body.querySelectorAll(selector);
-    nodeList.forEach(el => {
+    let nodeListElementId = document.body.querySelectorAll(selector);
+    let nodeListLi = document.body.querySelectorAll('li');
+    console.log(nodeListLi);
+    
+    nodeListElementId.forEach(el => {
         el.classList.toggle('hide');
+    })
+    nodeListLi.forEach(el => {
+        console.log(el.firstChild);
+        
     })
 }
 
 export function addHide(selector: string) {    
     let nodeList = document.body.querySelectorAll(selector);
     nodeList.forEach(el => {
-        if (el.getAttribute('data-element-id') != '' && !el.classList.contains('hide')) {
-            el.classList.add('hide');
-        }
+        el.classList.add('hide');
+        el.parentElement?.classList.remove('active');
     })
 }

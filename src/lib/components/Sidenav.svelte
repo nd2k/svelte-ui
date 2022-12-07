@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { outsideAction, addHide } from "$lib/utils/domManipulation";
-
     export let backgroundColor: string = "var(--primary-color)";
     export let color: string = "var(--white-color)";
     export let width: number = 30;
@@ -14,17 +12,13 @@
     $: position = `position: ${position}; top: ${top}rem; left: ${left}rem; bottom: ${bottom}rem; right: ${right}rem`;
     $: variables = `--backgroundColor: ${backgroundColor}; color: ${color}; --width: ${width}%; --height: ${height}%;`
     $: style =  `${variables} ${position}`;
-
-    function handleOutsideAction(element: HTMLElement) {      
-        outsideAction(element, 'mousemove', addHide, `li`);
-    }
 </script>
 
 <div class="sidenav" {style}>
     <div class="header-menu">
         <slot name="header-menu"/>
     </div>
-    <div class="main-menu" use:handleOutsideAction>
+    <div class="main-menu">
         <slot name="main-menu" />
     </div>
     <div class="footer-menu">
