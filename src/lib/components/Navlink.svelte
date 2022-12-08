@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { removeHideAction } from "$lib/utils/domManipulation";
+	import { showElementAction } from "$lib/utils/domManipulation";
 
     export let outline: boolean = false;
     export let rounded: number = 50;
@@ -17,8 +17,8 @@
     export let targetElement: string = '';
     export let elementId: string = '';
 
-    let active: string = ''
-    let hide: string = ''
+    let hide: boolean = true;
+    let active: boolean = false;
 
     $: borderStyle = border !== 0 ? 
     `border: ${border}px solid ${borderColor};` : 'border: none;'
@@ -31,21 +31,17 @@
 	: `${variables} --backgroundColor: ${backgroundColor}; --color: ${color}; ${borderStyle} --hoverColor: ${hoverColor}; 
     --hoverBackgroundColor: ${hoverBackgroundColor};`;
 
-    $: classToAdd = level === 1 ? 
-    `nav-link ${active} ${hide}` :
-    `nav-link ${active} hide`;
-
     function handleOnMouseEnter(node: HTMLElement) {
-        removeHideAction(node, 'mouseenter');    
+        showElementAction(node, 'mouseenter');    
     }
 </script>
 
 <li  
     {style} 
-    class={classToAdd}
+    class='nav-link {hide && level > 1 ? 'hide' : '' && active ? 'active' : '' }'
     data-target-element={targetElement}
-    data-element-id={elementId}
-    use:handleOnMouseEnter >
+    data-element-id={elementId} 
+    use:handleOnMouseEnter>
     <a {href}><slot /></a>
 </li>
 
@@ -73,14 +69,17 @@
         flex-direction: row;
         align-items: center;
     }
-    .nav-link:hover {
+    .nav-link:hover,
+    .nav-link.active {
         background-color: var(--hoverBackgroundColor);
     }
-    .nav-link:hover a {
+    .nav-link:hover a,
+    .nav-link.active a {
         color: var(--hoverColor);
         font-weight: 600;
     }
-    .nav-link:hover a::after {
+    .nav-link:hover a::after,
+    .nav-link.active a::after {
         content: ' ';
         display: inline-block;
         border-bottom: 3px solid var(--white-color);
@@ -92,10 +91,11 @@
         right: calc(var(--level) + 1.5rem);
         transition: 0.3s;
     }
-    .active a {
-        color: red;
+    .nav-link.active a::after {
+        transform: rotate(45deg);
     }
-    .hide {
+
+    .nav-link.hide {
         display: none;
         visibility: hidden;
     }

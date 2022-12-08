@@ -16,32 +16,29 @@ export function outsideAction(element: HTMLElement, eventListener: string, callb
     }
 }
 
-export function removeHideAction(element: HTMLElement, showEventListener: string) {
-    function showAction() {
-        let targetElement = element?.dataset.targetElement;
-        if (document !== null && targetElement !== undefined) {           
-            if (targetElement !== '') {
-                removeHide(`[data-element-id=${targetElement}]`)
-                element.setAttribute('activeClass', 'active');
-            }
-        }
-    }   
-    element.addEventListener(showEventListener, showAction);
-    return () => {
-        element.removeEventListener(showEventListener, showAction);
-    }
+export function hideElement(selector: string) {
+    let elementIdNode = document.body.querySelectorAll(`.nav-link[data-element-id=${selector}]`);
+    let element = document.body.querySelector(`.nav-link[data-target-element=${selector}]`)
+    elementIdNode.forEach(el => {
+        el.classList.add('hide');
+    })
+    element?.classList.remove('active');
 }
 
-export function removeHide(selector: string) {
-    let nodeListElementId = document.body.querySelectorAll(selector);
-    nodeListElementId.forEach(el => {        
-        el.setAttribute('hide', '');
+export function showElement(selector: string) {
+    let elementIdNode = document.body.querySelectorAll(selector);
+    elementIdNode.forEach(el => {
+        el.classList.remove('hide');
     })
 }
 
-export function addHide(selector: string) {    
-    let nodeList = document.body.querySelectorAll(selector);
-    nodeList.forEach(el => {
-        el.setAttribute('hide', 'hide');
+export function showElementAction(element: HTMLElement, eventListener: string) {
+    let targetElement = element?.dataset.targetElement;
+    element.addEventListener(eventListener, () => {
+        if (targetElement !== '') {
+            showElement(`[data-element-id=${targetElement}]`)
+            element.classList.add('active');
+        }
+        
     })
 }

@@ -4,10 +4,10 @@
     import Icon from '$lib/components/Icon.svelte';
 	import Navlink from '$lib/components/Navlink.svelte';
 	import Sidenav from '$lib/components/Sidenav.svelte';
-	import { addHide, outsideAction } from '$lib/utils/domManipulation';
+	import { hideElement, outsideAction } from '$lib/utils/domManipulation';
 
     function handleOutsideAction(element: HTMLElement, elementId: string) {      
-        outsideAction(element, 'mousemove', addHide, `.nav-link[data-element-id=${elementId}]`);
+        outsideAction(element, 'mousemove', hideElement, elementId);
     }
 </script>
 
@@ -24,7 +24,11 @@
             <div use:handleOutsideAction={'test'}>
                 <Navlink href="/" targetElement="test"><Icon name="plus-square" />Test</Navlink>
                 <Navlink href="/" level={2} elementId="test"><Icon name="minus-square" />Test 1</Navlink>
-                <Navlink href="/" level={2} elementId="test"><Icon name="minus-square" />Test 2</Navlink>
+                <div use:handleOutsideAction={'test2'}>
+                    <Navlink href="/" level={2} targetElement="test2" elementId="test"><Icon name="minus-square" />Test 1</Navlink>
+                    <Navlink href="/" level={3} elementId="test2"><Icon name="minus-square" />Test 2</Navlink>
+                    <Navlink href="/" level={3} elementId="test2"><Icon name="minus-square" />Test 2</Navlink>
+                </div>
             </div>
         </div>
         <h3 slot="footer-menu">Footer Menu</h3>
