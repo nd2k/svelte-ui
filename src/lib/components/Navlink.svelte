@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { outsideAction, toggleHideAction } from "$lib/utils/domManipulation";
-
+	import { removeHideAction } from "$lib/utils/domManipulation";
 
     export let outline: boolean = false;
     export let rounded: number = 50;
@@ -18,7 +17,8 @@
     export let targetElement: string = '';
     export let elementId: string = '';
 
-    let element: HTMLElement;
+    let active: string = ''
+    let hide: string = ''
 
     $: borderStyle = border !== 0 ? 
     `border: ${border}px solid ${borderColor};` : 'border: none;'
@@ -31,15 +31,18 @@
 	: `${variables} --backgroundColor: ${backgroundColor}; --color: ${color}; ${borderStyle} --hoverColor: ${hoverColor}; 
     --hoverBackgroundColor: ${hoverBackgroundColor};`;
 
+    $: classToAdd = level === 1 ? 
+    `nav-link ${active} ${hide}` :
+    `nav-link ${active} hide`;
+
     function handleOnMouseEnter(node: HTMLElement) {
-        toggleHideAction(node, 'mouseenter');    
+        removeHideAction(node, 'mouseenter');    
     }
 </script>
 
 <li  
     {style} 
-    class={level === 1 ? 'nav-link' : 'nav-link hide'} 
-    bind:this={element}
+    class={classToAdd}
     data-target-element={targetElement}
     data-element-id={elementId}
     use:handleOnMouseEnter >
@@ -88,6 +91,9 @@
         position: absolute;
         right: calc(var(--level) + 1.5rem);
         transition: 0.3s;
+    }
+    .active a {
+        color: red;
     }
     .hide {
         display: none;

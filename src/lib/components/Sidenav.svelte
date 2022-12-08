@@ -30,12 +30,12 @@
     .sidenav {
         background-color: var(--backgroundColor);
         width: var(--width);
+        min-width: 13rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
         padding: 1rem 0;
-        position: relative;
         overflow-x: hidden;
     }
     .header-menu {
